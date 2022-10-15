@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+class HomeViewModel: ObservableObject {
+    
+    @Published var showSearch: Bool = false
+    
+}

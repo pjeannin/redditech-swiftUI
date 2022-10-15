@@ -17,7 +17,9 @@ struct ContentView: View {
                 showLogin = false
             }
         } else {
-            HomeView(showLogin: $showLogin)
+            HomeView() {
+                showLogin = true
+            }
         }
     }
 }

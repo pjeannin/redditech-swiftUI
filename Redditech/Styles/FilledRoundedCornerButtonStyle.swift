@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct FilledRoundedCornerButtonStyle: ButtonStyle {
-    var padding: CGFloat = 8
-    var bgColor: Color = Color("PrimaryColor")
-//    var bgColor: Color = .green
-    var fgColor: Color = Color("SecondaryColor")
-    var cornerRadius: CGFloat = 10
+    var padding: CGFloat
+    var bgColor: Color
+    var fgColor: Color
+    var cornerRadius: CGFloat
+    
+    init(padding: CGFloat = 8, bgColor: Color = Color("PrimaryColor"), fgColor: Color = Color("SecondaryColor"), cornerRadius: CGFloat = 10) {
+        self.padding = padding
+        self.bgColor = bgColor
+        self.fgColor = fgColor
+        self.cornerRadius = cornerRadius
+    }
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
