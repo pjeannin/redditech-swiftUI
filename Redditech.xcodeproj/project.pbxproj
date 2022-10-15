@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E17F3F628F8AE3000E1EF6A /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E17F3F528F8AE3000E1EF6A /* WebView.swift */; };
+		9E3A708428FB34A800AABF92 /* KetchainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3A708328FB34A800AABF92 /* KetchainManager.swift */; };
 		9E74FE5228F7A4BE00585C6C /* RedditechApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE5128F7A4BE00585C6C /* RedditechApp.swift */; };
 		9E74FE5428F7A4BE00585C6C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE5328F7A4BE00585C6C /* ContentView.swift */; };
 		9E74FE5628F7A4BE00585C6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E74FE5528F7A4BE00585C6C /* Assets.xcassets */; };
@@ -14,6 +16,12 @@
 		9E74FE6328F7A4BE00585C6C /* RedditechTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE6228F7A4BE00585C6C /* RedditechTests.swift */; };
 		9E74FE6D28F7A4BE00585C6C /* RedditechUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE6C28F7A4BE00585C6C /* RedditechUITests.swift */; };
 		9E74FE6F28F7A4BE00585C6C /* RedditechUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE6E28F7A4BE00585C6C /* RedditechUITestsLaunchTests.swift */; };
+		9E74FE8128F7A4FE00585C6C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE8028F7A4FE00585C6C /* LoginView.swift */; };
+		9E74FE8328F7A50900585C6C /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE8228F7A50900585C6C /* LoginViewModel.swift */; };
+		9E74FE8528F7A75400585C6C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE8428F7A75400585C6C /* HomeViewController.swift */; };
+		9E74FE8728F7A75E00585C6C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE8628F7A75E00585C6C /* HomeView.swift */; };
+		9E74FE8C28F7A96100585C6C /* FilledRoundedCornerButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E74FE8B28F7A96100585C6C /* FilledRoundedCornerButtonStyle.swift */; };
+		9ECAFD2928FA041D00375909 /* RedditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECAFD2828FA041D00375909 /* RedditService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +42,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E17F3F528F8AE3000E1EF6A /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		9E17F3F728F8C54100E1EF6A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9E3A708328FB34A800AABF92 /* KetchainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KetchainManager.swift; sourceTree = "<group>"; };
 		9E74FE4E28F7A4BE00585C6C /* Redditech.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Redditech.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E74FE5128F7A4BE00585C6C /* RedditechApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditechApp.swift; sourceTree = "<group>"; };
 		9E74FE5328F7A4BE00585C6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +55,12 @@
 		9E74FE6828F7A4BE00585C6C /* RedditechUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RedditechUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E74FE6C28F7A4BE00585C6C /* RedditechUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditechUITests.swift; sourceTree = "<group>"; };
 		9E74FE6E28F7A4BE00585C6C /* RedditechUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditechUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9E74FE8028F7A4FE00585C6C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		9E74FE8228F7A50900585C6C /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		9E74FE8428F7A75400585C6C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		9E74FE8628F7A75E00585C6C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		9E74FE8B28F7A96100585C6C /* FilledRoundedCornerButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledRoundedCornerButtonStyle.swift; sourceTree = "<group>"; };
+		9ECAFD2828FA041D00375909 /* RedditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +88,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9E3A708228FB349700AABF92 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9E3A708328FB34A800AABF92 /* KetchainManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		9E74FE4528F7A4BE00585C6C = {
 			isa = PBXGroup;
 			children = (
@@ -94,8 +119,12 @@
 		9E74FE5028F7A4BE00585C6C /* Redditech */ = {
 			isa = PBXGroup;
 			children = (
+				9E3A708228FB349700AABF92 /* Utils */,
+				9ECAFD2728FA040600375909 /* Services */,
+				9E17F3F728F8C54100E1EF6A /* Info.plist */,
+				9E74FE8A28F7A94B00585C6C /* Styles */,
 				9E74FE5128F7A4BE00585C6C /* RedditechApp.swift */,
-				9E74FE5328F7A4BE00585C6C /* ContentView.swift */,
+				9E74FE7B28F7A4CB00585C6C /* View */,
 				9E74FE5528F7A4BE00585C6C /* Assets.xcassets */,
 				9E74FE5728F7A4BE00585C6C /* Preview Content */,
 			);
@@ -125,6 +154,59 @@
 				9E74FE6E28F7A4BE00585C6C /* RedditechUITestsLaunchTests.swift */,
 			);
 			path = RedditechUITests;
+			sourceTree = "<group>";
+		};
+		9E74FE7B28F7A4CB00585C6C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9E74FE7F28F7A4F000585C6C /* Home */,
+				9E74FE7E28F7A4E800585C6C /* Login */,
+				9E74FE7C28F7A4D200585C6C /* Components */,
+				9E74FE5328F7A4BE00585C6C /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9E74FE7C28F7A4D200585C6C /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		9E74FE7E28F7A4E800585C6C /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				9E74FE8028F7A4FE00585C6C /* LoginView.swift */,
+				9E74FE8228F7A50900585C6C /* LoginViewModel.swift */,
+				9E17F3F528F8AE3000E1EF6A /* WebView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		9E74FE7F28F7A4F000585C6C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				9E74FE8428F7A75400585C6C /* HomeViewController.swift */,
+				9E74FE8628F7A75E00585C6C /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		9E74FE8A28F7A94B00585C6C /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				9E74FE8B28F7A96100585C6C /* FilledRoundedCornerButtonStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
+		9ECAFD2728FA040600375909 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9ECAFD2828FA041D00375909 /* RedditService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,8 +339,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E74FE8528F7A75400585C6C /* HomeViewController.swift in Sources */,
+				9E17F3F628F8AE3000E1EF6A /* WebView.swift in Sources */,
+				9E74FE8728F7A75E00585C6C /* HomeView.swift in Sources */,
+				9E74FE8328F7A50900585C6C /* LoginViewModel.swift in Sources */,
+				9E74FE8128F7A4FE00585C6C /* LoginView.swift in Sources */,
 				9E74FE5428F7A4BE00585C6C /* ContentView.swift in Sources */,
+				9E3A708428FB34A800AABF92 /* KetchainManager.swift in Sources */,
 				9E74FE5228F7A4BE00585C6C /* RedditechApp.swift in Sources */,
+				9E74FE8C28F7A96100585C6C /* FilledRoundedCornerButtonStyle.swift in Sources */,
+				9ECAFD2928FA041D00375909 /* RedditService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +510,7 @@
 				DEVELOPMENT_TEAM = B36L6U63VJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Redditech/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -449,6 +540,7 @@
 				DEVELOPMENT_TEAM = B36L6U63VJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Redditech/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
