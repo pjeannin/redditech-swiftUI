@@ -51,6 +51,6 @@ class KeychainManager {
             kSecAttrAccount as String: account as AnyObject,
         ]
         
-        let status = SecItemDelete(query as CFDictionary)
+        SecItemDelete(query as CFDictionary)
     }
 }

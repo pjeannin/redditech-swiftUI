@@ -32,6 +32,7 @@ class LoginViewModel: ObservableObject {
     
     private func onGetTokenSuccess(token: String) {
         saveToken(token)
+        print("the encoded token is \(token)")
     }
     
     private func onGetTokenFail() {

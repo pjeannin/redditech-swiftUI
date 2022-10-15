@@ -7,14 +7,6 @@
 
 import Foundation
 
-struct TokenResponse: Decodable {
-    let accessToken: String
-    let tokenType: String
-    let expiresIn: Int
-    let refreshToken: String
-    let scope: String
-}
-
 struct RedditService {
     
     let clientId: String = "dUxErvdbUGrVgwX4ZMHD8A"
@@ -24,6 +16,7 @@ struct RedditService {
     var loginUrl: URL? {
         URL.init(string: "https://www.reddit.com/api/v1/authorize.compact?client_id=\(clientId)&response_type=code&state=\(state)&redirect_uri=\(redirectUri)&duration=permanent&scope=*")
     }
+    let baseUrl: String = "https://oauth.reddit.com"
     
     private func getTokenUrl(code: String) -> URL? {
         return URL.init(string: "https://www.reddit.com/api/v1/access_token?redirect_uri=\(redirectUri)&grant_type=\(grantType)&code=\(code)")
@@ -66,5 +59,38 @@ struct RedditService {
         guard let code = url.queryItems?.first(where: { $0.name == "code" })?.value else { return }
         let authorization = getAuthorizationEncodedCode(from: code)
         fetchToken(with: authorization, and: code, onCompleted: onCompleted, onFailure: onFailure)
+    }
+    
+    func fetchMe(onCompleted: @escaping (MeResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me?raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            print(String(data: data, encoding: .utf8)!)
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let me = try decoder.decode(MeResponse.self, from: data)
+                onCompleted(me)
+            } catch {
+                onFailure()
+                print(error)
+            }
+        }
+        task.resume()
     }
 }
