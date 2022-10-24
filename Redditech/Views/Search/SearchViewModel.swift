@@ -7,6 +7,6 @@
 
 import Foundation
 
-class SeaarchViewModel: ObservableObject {
-    
+class SearchViewModel: ObservableObject {
+    @Published var searchedText: String = ""
 }

@@ -13,31 +13,40 @@ struct HomeView: View {
     @ObservedObject var homeViewModel: HomeViewModel = HomeViewModel()
     
     var body: some View {
-        ZStack {
-            Color("SecondaryColor")
-                .ignoresSafeArea()
-            NavigationView {
-                Text("Home")
+        
+        NavigationView {
+            ZStack {
+                Color("SecondaryColor")
+                    .ignoresSafeArea()
+                VStack(spacing: 0) {
+                    Divider()
+                        .background(Color("PrimaryColor").opacity(0.2))
+                    
+                    Spacer()
+                }
                 .navigationTitle("Home")
                 .toolbar {
+                    ToolbarItemGroup(placement: .navigationBarLeading) {
+                        PostSourceButton(current: $homeViewModel.currentPostSource)
+                    }
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button {
                             homeViewModel.showSearch = true
                         } label: {
                             Label("Profile", systemImage: "magnifyingglass")
                         }
-                        .foregroundColor(Color("PrimaryColor"))
                         NavigationLink {
                             ProfileView(logout: logout)
                         } label: {
                             Label("Profile", systemImage: "person.crop.circle")
                         }
-                        .foregroundColor(Color("PrimaryColor"))
                     }
                 }
-            }.sheet(isPresented: $homeViewModel.showSearch) {
-                SearchView()
+                .foregroundColor(Color("PrimaryColor"))
             }
+        }
+        .sheet(isPresented: $homeViewModel.showSearch) {
+            SearchView(showSearch: $homeViewModel.showSearch)
         }
     }
 }

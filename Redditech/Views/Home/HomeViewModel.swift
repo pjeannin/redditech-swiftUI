@@ -10,5 +10,6 @@ import Foundation
 class HomeViewModel: ObservableObject {
     
     @Published var showSearch: Bool = false
+    @Published var currentPostSource: PostSource = .new
     
 }

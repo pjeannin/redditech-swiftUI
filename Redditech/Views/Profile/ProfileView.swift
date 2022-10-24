@@ -48,6 +48,11 @@ struct ProfileView: View {
                     Spacer()
                 }
             }
+            if let user = profileViewModel.user, let posts = profileViewModel.posts {
+                List(posts.data.children) { post in
+                        PostView(username: user.subreddit.displayNamePrefixed, title: post.data.title, description: post.data.selftext)
+                    }
+                }
             Spacer()
             Button("Logout") {
                 KeychainManager.delete(service: "reddit", account: "currentUser")

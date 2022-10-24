@@ -40,7 +40,6 @@ struct RedditService {
             guard let data = data else {
                 return
             }
-            print(String(data: data, encoding: .utf8)!)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
@@ -80,12 +79,43 @@ struct RedditService {
             guard let data = data else {
                 return
             }
-            print(String(data: data, encoding: .utf8)!)
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let me = try decoder.decode(MeResponse.self, from: data)
                 onCompleted(me)
+            } catch {
+                onFailure()
+                print(error)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchUserPosts(_ username: String, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/user/\(username)/new?sr_detail=sr_detail&raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
+                onCompleted(usersPosts)
             } catch {
                 onFailure()
                 print(error)
