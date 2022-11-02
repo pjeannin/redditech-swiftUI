@@ -42,6 +42,14 @@ struct ProfileView: View {
                         }
                 }
                 .navigationTitle("u/\(user.name)")
+                .toolbar {
+                    NavigationLink {
+                        UserSettingsView(user: user)
+                    } label: {
+                        Label("Settings", systemImage: "gear")
+                    }
+                }
+                .foregroundColor(Color("PrimaryColor"))
                 HStack {
                     Text(user.subreddit.publicDescription)
                         .padding(.leading, 8)

@@ -49,12 +49,31 @@ struct SearchView: View {
                     } else {
                         Button("Clear") {
                             searchViewModel.searchedText = ""
+                            searchViewModel.searchResult = []
                         }
                         .padding(.trailing)
                     }
                 }
                 List(searchViewModel.searchResult) { elem in
                     HStack {
+                        if let imgUrl: String = elem.data.communityIcon {
+                            AsyncImage(url: URL(string: imgUrl)){ image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .cornerRadius(15)
+                                    .frame(width: 30, height: 30, alignment: .bottomTrailing)
+                                    .layoutPriority(1)
+                                    .padding(EdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 5))
+                                } placeholder: {
+                                    Color.gray.opacity(0.1)
+                                        .scaledToFit()
+                                        .cornerRadius(15)
+                                        .frame(width: 30, height: 30, alignment: .bottomTrailing)
+                                        .layoutPriority(1)
+                                        .padding(EdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 5))
+                                }
+                        }
                         Text(elem.data.url)
                         Spacer()
                         Text("\(elem.data.subscribers ?? 0) sub")
