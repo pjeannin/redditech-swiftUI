@@ -210,7 +210,6 @@ struct RedditService {
         do {
             let body = try encoder.encode(newPrefs)
             request.httpBody = body
-            print("body : \(String(bytes: request.httpBody!, encoding: .utf8))")
         } catch {
             onFailure("Fail to encode body")
         }
@@ -220,22 +219,42 @@ struct RedditService {
                 onFailure("Fail to convert URLResponse to HTTPURLResponse")
                 return
             }
-
+            if (res.statusCode == 200) {
+                onCompleted()
+            } else {
+                onFailure(res.description + "" + res.debugDescription)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchHomePosts(postType: PostSource, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(postType == .hot ? "hot" : (postType == .new ? "new" : "top"))?sr_detail=sr_detail&raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let data = data else {
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            if (res.statusCode == 200) {
-                do {
-                    let prefs = try decoder.decode(PrefsResponse.self, from: data)
-                    print(prefs)
-                } catch {
-                    
-                }
-                onCompleted()
-            } else {
-                onFailure(res.description + "" + res.debugDescription)
+            do {
+                let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
+                onCompleted(usersPosts)
+            } catch {
+                onFailure()
+                print(error)
             }
         }
         task.resume()
