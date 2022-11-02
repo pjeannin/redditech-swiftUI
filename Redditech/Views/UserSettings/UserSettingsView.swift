@@ -15,11 +15,17 @@ struct UserSettingsView: View {
     }
     
     @ObservedObject var userSettingsViewModel: UserSettingsViewModel
+    
     var body: some View {
         VStack {
-            List(userSettingsViewModel.prefsArray) { elem in
-                Toggle(elem.title, isOn: $userSettingsViewModel.prefsArray[userSettingsViewModel.prefsArray.firstIndex(of: elem) ?? 0
-                                                                          ].value)
+            List {
+                Toggle("Search include over 18", isOn: $userSettingsViewModel.prefs.searchIncludeOver18)
+                    .onChange(of: userSettingsViewModel.prefs.searchIncludeOver18) { _ in
+                        userSettingsViewModel.patchPrefs()
+                    }
+                Toggle("Video autoplay", isOn: $userSettingsViewModel.prefs.videoAutoplay)
+                Toggle("Show trending", isOn: $userSettingsViewModel.prefs.showTrending)
+                Toggle("Hide downs", isOn: $userSettingsViewModel.prefs.hideDowns)
             }
         }
         .navigationTitle("Preferences")

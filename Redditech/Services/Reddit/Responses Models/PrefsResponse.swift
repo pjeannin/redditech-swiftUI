@@ -9,76 +9,76 @@ import Foundation
 
 struct Pref: Identifiable, Equatable {
     let id: UUID = UUID()
-    let title: String
+    var title: String
     var value: Bool
 }
 
-struct PrefsResponse: Decodable {
-    let beta: Bool
-    let threadedMessages: Bool
-    let emailCommentReply: Bool
-    let privateFeeds: Bool
-    let activityRelevantAds: Bool
-    let emailMessages: Bool
-    let videoAutoplay: Bool
-    let emailPrivateMessage: Bool
-    let showLinkFlair: Bool
-    let hideUps: Bool
-    let showTrending: Bool
-    let sendWelcomeMessages: Bool
-    let designBeta: Bool
-    let monitorMentions: Bool
-    let hideDowns: Bool
-    let clickgadget: Bool
-    let ignoreSuggestedSort: Bool
-    let showPresence: Bool
-    let emailUpvoteComment: Bool
-    let emailDigests: Bool
-    let whatsappCommentReply: Bool
-    let feedRecommendationsEnabled: Bool
-    let labelNsfw: Bool
-    let research: Bool
-    let useGlobalDefaults: Bool
-    let showSnoovatar: Bool
-    let over18: Bool
-    let legacySearch: Bool
-    let liveOrangereds: Bool
-    let highlightControversial: Bool
-    let noProfanity: Bool
-    let domainDetails: Bool
-    let collapseLeftBar: Bool
-    let emailCommunityDiscovery: Bool
-    let liveBarRecommendationsEnabled: Bool
-    let thirdPartyDataPersonalizedAds: Bool
-    let emailChatRequest: Bool
-    let allowClicktracking: Bool
-    let hideFromRobots: Bool
-    let showTwitter: Bool
-    let compress: Bool
-    let storeVisits: Bool
-    let threadedModmail: Bool
-    let emailUpvotePost: Bool
-    let emailUserNewFollower: Bool
-    let nightmode: Bool
-    let enableDefaultThemes: Bool
-    let showStylesheets: Bool
-    let enableFollowers: Bool
-    let publicVotes: Bool
-    let emailPostReply: Bool
-    let collapseReadMessages: Bool
-    let showFlair: Bool
-    let markMessagesRead: Bool
-    let searchIncludeOver18: Bool
-    let hideAds: Bool
-    let emailUsernameMention: Bool
-    let topKarmaSubreddits: Bool
-    let newwindow: Bool
-    let sendCrosspostMessages: Bool
-    let publicServerSeconds: Bool
-    let showGoldExpiration: Bool
-    let highlightNewComments: Bool
-    let emailUnsubscribeAll: Bool
-    let showLocationBasedRecommendations: Bool
+struct PrefsResponse: Codable {
+    var beta: Bool = false
+    var threadedMessages: Bool = false
+    var emailCommentReply: Bool = false
+    var privateFeeds: Bool = false
+    var activityRelevantAds: Bool = false
+    var emailMessages: Bool = false
+    var videoAutoplay: Bool = false
+    var emailPrivateMessage: Bool = false
+    var showLinkFlair: Bool = false
+    var hideUps: Bool = false
+    var showTrending: Bool = false
+    var sendWelcomeMessages: Bool = false
+    var designBeta: Bool = false
+    var monitorMentions: Bool = false
+    var hideDowns: Bool = false
+    var clickgadget: Bool = false
+    var ignoreSuggestedSort: Bool = false
+    var showPresence: Bool = false
+    var emailUpvoteComment: Bool = false
+    var emailDigests: Bool = false
+    var whatsappCommentReply: Bool = false
+    var feedRecommendationsEnabled: Bool = false
+    var labelNsfw: Bool = false
+    var research: Bool = false
+    var useGlobalDefaults: Bool = false
+    var showSnoovatar: Bool = false
+    var over18: Bool = false
+    var legacySearch: Bool = false
+    var liveOrangereds: Bool = false
+    var highlightControversial: Bool = false
+    var noProfanity: Bool = false
+    var domainDetails: Bool = false
+    var collapseLeftBar: Bool = false
+    var emailCommunityDiscovery: Bool = false
+    var liveBarRecommendationsEnabled: Bool = false
+    var thirdPartyDataPersonalizedAds: Bool = false
+    var emailChatRequest: Bool = false
+    var allowClicktracking: Bool = false
+    var hideFromRobots: Bool = false
+    var showTwitter: Bool = false
+    var compress: Bool = false
+    var storeVisits: Bool = false
+    var threadedModmail: Bool = false
+    var emailUpvotePost: Bool = false
+    var emailUserNewFollower: Bool = false
+    var nightmode: Bool = false
+    var enableDefaultThemes: Bool = false
+    var showStylesheets: Bool = false
+    var enableFollowers: Bool = false
+    var publicVotes: Bool = false
+    var emailPostReply: Bool = false
+    var collapseReadMessages: Bool = false
+    var showFlair: Bool = false
+    var markMessagesRead: Bool = false
+    var searchIncludeOver18: Bool = false
+    var hideAds: Bool = false
+    var emailUsernameMention: Bool = false
+    var topKarmaSubreddits: Bool = false
+    var newwindow: Bool = false
+    var sendCrosspostMessages: Bool = false
+    var publicServerSeconds: Bool = false
+    var showGoldExpiration: Bool = false
+    var highlightNewComments: Bool = false
+    var emailUnsubscribeAll: Bool = false
+    var showLocationBasedRecommendations: Bool = false
     
     func toArray() -> [Pref] {
         return [

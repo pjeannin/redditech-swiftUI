@@ -188,4 +188,41 @@ struct RedditService {
         }
         task.resume()
     }
+    
+    func patchPrefs(with newPrefs: PrefsResponse, onCompleted: @escaping () -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me/prefs?raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "PATCH"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        do {
+            let body = try encoder.encode(newPrefs)
+            request.httpBody = body
+        } catch {
+            onFailure()
+        }
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
+                onFailure()
+                return
+            }
+            if (res.statusCode == 200) {
+                onCompleted()
+            } else {
+                onFailure()
+            }
+        }
+        task.resume()
+    }
 }
