@@ -19,13 +19,15 @@ struct UserSettingsView: View {
     var body: some View {
         VStack {
             List {
-                Toggle("Search include over 18", isOn: $userSettingsViewModel.prefs.searchIncludeOver18)
-                    .onChange(of: userSettingsViewModel.prefs.searchIncludeOver18) { _ in
-                        userSettingsViewModel.patchPrefs()
-                    }
-                Toggle("Video autoplay", isOn: $userSettingsViewModel.prefs.videoAutoplay)
-                Toggle("Show trending", isOn: $userSettingsViewModel.prefs.showTrending)
-                Toggle("Hide downs", isOn: $userSettingsViewModel.prefs.hideDowns)
+                PrefsToggle(value: $userSettingsViewModel.prefs.emailMessages, title: "Email Messages", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.videoAutoplay, title: "Video Autoplay", userSettingsViewModel: userSettingsViewModel)
+                    PrefsToggle(value: $userSettingsViewModel.prefs.hideUps, title: "Hide ups", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.showTrending, title: "Show Trending", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.hideDowns, title: "Hide downs", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.showPresence, title: "Show presence", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.showTwitter, title: "Show Twitter", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.publicVotes, title: "Public votes", userSettingsViewModel: userSettingsViewModel)
+                PrefsToggle(value: $userSettingsViewModel.prefs.markMessagesRead, title: "Mark messages as read", userSettingsViewModel: userSettingsViewModel)
             }
         }
         .navigationTitle("Preferences")

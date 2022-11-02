@@ -9,7 +9,7 @@ import Foundation
 
 class UserSettingsViewModel: ObservableObject {
     let user: MeResponse?
-    var prefs: PrefsResponse = PrefsResponse()
+    @Published var prefs: PrefsResponse = PrefsResponse()
     let redditService: RedditService = RedditService()
     
     init(user: MeResponse) {
@@ -29,11 +29,10 @@ class UserSettingsViewModel: ObservableObject {
     }
     
     private func onPatchPrefs() {
-        fetchPrefs()
     }
     
-    private func onPatchPrefsFail() {
-        
+    private func onPatchPrefsFail(message: String) {
+        print(message)
     }
     
     public func patchPrefs() {

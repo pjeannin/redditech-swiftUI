@@ -36,6 +36,7 @@
 		9EA585632912104C001FD49E /* UserSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA585622912104C001FD49E /* UserSettingsView.swift */; };
 		9EA585652912105D001FD49E /* UserSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA585642912105D001FD49E /* UserSettingsViewModel.swift */; };
 		9EA585682912138B001FD49E /* PrefsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA585672912138B001FD49E /* PrefsResponse.swift */; };
+		9EA7B8D629132D9800F82DD5 /* PrefsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA7B8D529132D9800F82DD5 /* PrefsToggle.swift */; };
 		9ECAFD2928FA041D00375909 /* RedditService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECAFD2828FA041D00375909 /* RedditService.swift */; };
 		BBC3360F6669A8F2C453A2BF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = BBC337B236C57651B43F0445 /* .gitignore */; };
 /* End PBXBuildFile section */
@@ -91,6 +92,7 @@
 		9EA585622912104C001FD49E /* UserSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsView.swift; sourceTree = "<group>"; };
 		9EA585642912105D001FD49E /* UserSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsViewModel.swift; sourceTree = "<group>"; };
 		9EA585672912138B001FD49E /* PrefsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsResponse.swift; sourceTree = "<group>"; };
+		9EA7B8D529132D9800F82DD5 /* PrefsToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefsToggle.swift; sourceTree = "<group>"; };
 		9ECAFD2828FA041D00375909 /* RedditService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditService.swift; sourceTree = "<group>"; };
 		BBC337B236C57651B43F0445 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -249,6 +251,7 @@
 			children = (
 				9E744F5228FCD91B004A0B95 /* PostView.swift */,
 				9E0B50A129073BEE003F060B /* PostSourceButton.swift */,
+				9EA7B8D529132D9800F82DD5 /* PrefsToggle.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				9E504A7B28FB5E3500576292 /* TokenResponse.swift in Sources */,
 				9EA4EB3B2911FD1200F6E43C /* SearchResponse.swift in Sources */,
 				9E74FE8128F7A4FE00585C6C /* LoginView.swift in Sources */,
+				9EA7B8D629132D9800F82DD5 /* PrefsToggle.swift in Sources */,
 				9E0B50A229073BEE003F060B /* PostSourceButton.swift in Sources */,
 				9E3A708C28FB4C2A00AABF92 /* SearchViewModel.swift in Sources */,
 				9E74FE5428F7A4BE00585C6C /* ContentView.swift in Sources */,

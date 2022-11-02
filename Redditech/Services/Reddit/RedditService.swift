@@ -189,11 +189,11 @@ struct RedditService {
         task.resume()
     }
     
-    func patchPrefs(with newPrefs: PrefsResponse, onCompleted: @escaping () -> Void, onFailure: @escaping () -> Void) {
-        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me/prefs?raw_json=1")
+    func patchPrefs(with newPrefs: PrefsResponse, onCompleted: @escaping () -> Void, onFailure: @escaping (String) -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me/prefs")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onFailure("Fail to create URL")
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -203,24 +203,39 @@ struct RedditService {
         )
         request.httpMethod = "PATCH"
         request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
+        print(newPrefs)
         do {
             let body = try encoder.encode(newPrefs)
             request.httpBody = body
+            print("body : \(String(bytes: request.httpBody!, encoding: .utf8))")
         } catch {
-            onFailure()
+            onFailure("Fail to encode body")
         }
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
-                onFailure()
+                onFailure("Fail to convert URLResponse to HTTPURLResponse")
                 return
             }
+
+            guard let data = data else {
+                return
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             if (res.statusCode == 200) {
+                do {
+                    let prefs = try decoder.decode(PrefsResponse.self, from: data)
+                    print(prefs)
+                } catch {
+                    
+                }
                 onCompleted()
             } else {
-                onFailure()
+                onFailure(res.description + "" + res.debugDescription)
             }
         }
         task.resume()
