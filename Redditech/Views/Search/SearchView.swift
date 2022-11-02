@@ -16,34 +16,6 @@ struct SearchView: View {
     
     @ObservedObject var searchViewModel: SearchViewModel = SearchViewModel()
     @Binding var showSearch: Bool
-    let fakeList: [Element] = [
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-        Element(name: "r/apple"),
-    ]
     
     var body: some View {
         ZStack {
@@ -57,6 +29,12 @@ struct SearchView: View {
                         HStack {
                             Image(systemName: "magnifyingglass")
                             TextField("Search ...", text: $searchViewModel.searchedText)
+                                .onChange(of: searchViewModel.searchedText) { _ in
+                                    searchViewModel.onSearchTextChange()
+                                }
+                                .onSubmit {
+                                    searchViewModel.onSearchTextChange()
+                                }
                         }
                         .padding(.leading, 13)
                     }
@@ -75,12 +53,11 @@ struct SearchView: View {
                         .padding(.trailing)
                     }
                 }
-                List(fakeList) { elem in
+                List(searchViewModel.searchResult) { elem in
                     HStack {
-                        Image(systemName: "apple.logo")
-                        Text(elem.name)
+                        Text(elem.data.url)
                         Spacer()
-                        Text("1M sub")
+                        Text("\(elem.data.subscribers ?? 0) sub")
                     }
                 }
             }

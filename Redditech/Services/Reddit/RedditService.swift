@@ -44,6 +44,7 @@ struct RedditService {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let tokenResponse = try decoder.decode(TokenResponse.self, from: data)
+                print("The access token is \(tokenResponse.accessToken)")
                 onCompleted(tokenResponse.accessToken)
             } catch {
                 onFailure()
@@ -116,6 +117,38 @@ struct RedditService {
             do {
                 let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
                 onCompleted(usersPosts)
+            } catch {
+                onFailure()
+                print(error)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchSearch(_ toSearch: String, onCompleted: @escaping (SearchResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)//subreddits/search?limit=100&q=\(toSearch)&raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let subreddits = try decoder.decode(SearchResponse.self, from: data)
+                onCompleted(subreddits)
             } catch {
                 onFailure()
                 print(error)

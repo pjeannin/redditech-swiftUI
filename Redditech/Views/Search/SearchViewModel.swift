@@ -9,4 +9,18 @@ import Foundation
 
 class SearchViewModel: ObservableObject {
     @Published var searchedText: String = ""
+    @Published var searchResult: [SearchSubredditWraper] = []
+    private let redditService: RedditService = RedditService()
+    
+    private func onSearchComplete(_ result: SearchResponse) {
+        DispatchQueue.main.async {
+            self.searchResult = result.data.children
+        }
+    }
+    
+    private func onSearchFail() {}
+    
+    public func onSearchTextChange() {
+        redditService.fetchSearch(searchedText, onCompleted: onSearchComplete, onFailure: onSearchFail)
+    }
 }
