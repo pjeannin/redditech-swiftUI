@@ -16,8 +16,10 @@ class HomeViewModel: ObservableObject {
     let redditService: RedditService = RedditService()
     
     private func onPostFetched(newPosts: ListPostResponse) {
-        isLoading = false
-        self.posts = newPosts
+        DispatchQueue.main.async {
+            self.isLoading = false
+            self.posts = newPosts
+        }
     }
     
     private func onPostFetchFail() {

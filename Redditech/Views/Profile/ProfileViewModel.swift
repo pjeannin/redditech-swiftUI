@@ -13,7 +13,9 @@ class ProfileViewModel: ObservableObject {
     private let redditService: RedditService = RedditService()
     
     private func onUserFetch(_ data: MeResponse) {
-        user = data
+        DispatchQueue.main.async {
+            self.user = data
+        }
         redditService.fetchUserPosts(data.name, onCompleted: onUsersPostFetch, onFailure: onGetUsersPostsFail)
         print("got user")
     }
@@ -23,7 +25,9 @@ class ProfileViewModel: ObservableObject {
     }
     
     private func onUsersPostFetch(_ data: ListPostResponse) {
-        posts = data
+        DispatchQueue.main.async {
+            self.posts = data
+        }
         print("got user posts")
     }
     
