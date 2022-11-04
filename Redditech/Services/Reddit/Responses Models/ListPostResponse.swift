@@ -7,14 +7,35 @@
 
 import Foundation
 
+struct ImagesDatas: Decodable {
+    let url: String
+    let width: Int
+    let height: Int
+}
+
+struct RedditImage: Decodable {
+    let source: ImagesDatas
+    let resolutions: [ImagesDatas]
+}
+
+struct Preview: Decodable {
+    let images: [RedditImage]?
+}
+
+struct SrDetail: Decodable {
+    let communityIcon: String?
+}
+
 struct PostReponse: Decodable {
     let subredditNamePrefixed: String
-    let selftext: String
+    let selftext: String?
     let saved: Bool
-    let title: String
+    let title: String?
     let downs: Int
     let ups: Int
     let upvoteRatio: Float
+    let srDetail: SrDetail
+    let preview: Preview?
 }
 
 struct PostWrapperResponse: Decodable, Identifiable {

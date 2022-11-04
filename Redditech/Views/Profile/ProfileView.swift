@@ -56,9 +56,9 @@ struct ProfileView: View {
                     Spacer()
                 }
             }
-            if let user = profileViewModel.user, let posts = profileViewModel.posts {
+            if let posts = profileViewModel.posts {
                 List(posts.data.children) { post in
-                        PostView(username: user.subreddit.displayNamePrefixed, title: post.data.title, description: post.data.selftext)
+                        PostView(postData: post.data)
                     }
                 }
             Spacer()

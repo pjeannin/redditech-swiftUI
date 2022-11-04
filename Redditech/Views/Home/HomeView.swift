@@ -28,13 +28,21 @@ struct HomeView: View {
                         .background(Color("PrimaryColor").opacity(0.2))
                     if homeViewModel.isLoading {
                         ProgressView()
+                            .padding()
                     } else if let posts = homeViewModel.posts {
                         List(posts.data.children) { post in
-                            PostView(username: post.data.subredditNamePrefixed, title: post.data.title, description: post.data.selftext)
-                            }
+                            PostView(postData: post.data)
+                                .padding(.vertical, 8)
+                                .listRowBackground(Color("SecondaryColor"))
+                                .listRowSeparator(.hidden)
+                        }
+                            .listStyle(.plain)
+                            .padding(.vertical, 8)
+                            .ignoresSafeArea()
                     }
                     Spacer()
                 }
+                .ignoresSafeArea(.all, edges: .bottom)
                 .navigationTitle("Home")
                 .toolbar {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
