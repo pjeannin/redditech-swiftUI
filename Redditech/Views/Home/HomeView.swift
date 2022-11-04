@@ -35,6 +35,7 @@ struct HomeView: View {
                                 .padding(.vertical, 8)
                                 .listRowBackground(Color("SecondaryColor"))
                                 .listRowSeparator(.hidden)
+                                .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 6, x: 0,y: 0)
                         }
                             .listStyle(.plain)
                             .padding(.vertical, 8)
