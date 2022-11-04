@@ -18,54 +18,65 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        VStack {
-            if let user = profileViewModel.user {
-                ZStack(alignment: .bottomTrailing) {
-                    AsyncImage(url: URL(string: user.subreddit.bannerImg)){ image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .layoutPriority(-1)
-                        } placeholder: {
-                            Color.gray.opacity(0.1)
+        ZStack {
+            Color("SecondaryColor")
+                .ignoresSafeArea()
+            VStack {
+                if let user = profileViewModel.user {
+                    ZStack(alignment: .bottomTrailing) {
+                        AsyncImage(url: URL(string: user.subreddit.bannerImg)){ image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .layoutPriority(-1)
+                            } placeholder: {
+                                Color.gray.opacity(0.1)
+                            }
+                        AsyncImage(url: URL(string: user.subreddit.iconImg)){ image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .cornerRadius(35)
+                                .frame(width: 70, height: 70, alignment: .bottomTrailing)
+                                .layoutPriority(1)
+                                .padding(EdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 8))
+                            } placeholder: {
+                                Color.gray.opacity(0.1)
+                            }
+                    }
+                    .navigationTitle("u/\(user.name)")
+                    .toolbar {
+                        NavigationLink {
+                            UserSettingsView(user: user)
+                        } label: {
+                            Label("Settings", systemImage: "gear")
                         }
-                    AsyncImage(url: URL(string: user.subreddit.iconImg)){ image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .cornerRadius(35)
-                            .frame(width: 70, height: 70, alignment: .bottomTrailing)
-                            .layoutPriority(1)
-                            .padding(EdgeInsets.init(top: 0, leading: 0, bottom: 8, trailing: 8))
-                        } placeholder: {
-                            Color.gray.opacity(0.1)
-                        }
-                }
-                .navigationTitle("u/\(user.name)")
-                .toolbar {
-                    NavigationLink {
-                        UserSettingsView(user: user)
-                    } label: {
-                        Label("Settings", systemImage: "gear")
+                    }
+                    .foregroundColor(Color("PrimaryColor"))
+                    HStack {
+                        Text(user.subreddit.publicDescription)
+                            .padding(.leading, 8)
+                        Spacer()
                     }
                 }
-                .foregroundColor(Color("PrimaryColor"))
-                HStack {
-                    Text(user.subreddit.publicDescription)
-                        .padding(.leading, 8)
-                    Spacer()
-                }
+                if let posts = profileViewModel.posts {
+                    List(posts.data.children) { post in
+                            PostView(postData: post.data)
+                            .padding(.vertical, 8)
+                            .listRowBackground(Color("SecondaryColor"))
+                            .listRowSeparator(.hidden)
+                            .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 6, x: 0,y: 0)
+                        }
+                    .listStyle(.plain)
+                    .padding(.vertical, 8)
+                    .ignoresSafeArea()
+                    }
+                Spacer()
+                Button("Logout") {
+                    KeychainManager.delete(service: "reddit", account: "currentUser")
+                    logout()
+                }.buttonStyle(FilledRoundedCornerButtonStyle(bgColor: Color("LightRed"), fgColor: .white))
             }
-            if let posts = profileViewModel.posts {
-                List(posts.data.children) { post in
-                        PostView(postData: post.data)
-                    }
-                }
-            Spacer()
-            Button("Logout") {
-                KeychainManager.delete(service: "reddit", account: "currentUser")
-                logout()
-            }.buttonStyle(FilledRoundedCornerButtonStyle(bgColor: Color("LightRed"), fgColor: .white))
         }
     }
 }
