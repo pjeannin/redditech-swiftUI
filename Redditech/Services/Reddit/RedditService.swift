@@ -259,4 +259,98 @@ struct RedditService {
         }
         task.resume()
     }
+    
+    func fetchSubreddit(_ subredditName: String, onCompleted: @escaping (SubredditDetailsResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(subredditName)/about?raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let subreddit = try decoder.decode(SubredditDetailsResponse.self, from: data)
+                onCompleted(subreddit)
+            } catch {
+                onFailure()
+                print(error)
+            }
+        }
+        task.resume()
+    }
+    
+    func fetchPostsOf(subreddit subredditName: String, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(subredditName)/new?sr_detail=sr_detail&raw_json=1")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "GET"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let data = data else {
+                return
+            }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            do {
+                let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
+                onCompleted(usersPosts)
+            } catch {
+                onFailure()
+                print(error)
+            }
+        }
+        task.resume()
+    }
+    
+    func subscribeOrUnsubscribe(to subredditName: String, value: Bool, onCompleted: @escaping (String) -> Void, onFailure: @escaping () -> Void) {
+        let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/subscribe?action=\(value ? "sub" : "unsub")&sr_name=\(subredditName)")
+        let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
+        guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
+            onFailure()
+            return
+        }
+        let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
+        var request = URLRequest(
+            url: url,
+            cachePolicy: .reloadIgnoringLocalCacheData
+        )
+        request.httpMethod = "POST"
+        request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        let session: URLSession = URLSession.shared
+        let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
+                onFailure()
+                return
+            }
+            if (res.statusCode == 200) {
+                onCompleted(subredditName)
+            } else {
+                onFailure()
+            }
+        }
+        task.resume()
+    }
+
 }

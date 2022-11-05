@@ -16,6 +16,7 @@ struct SearchSubbreddit: Decodable {
     let bannerImg: String?
     let url: String
     let communityIcon: String?
+    let displayNamePrefixed: String
 }
 
 struct SearchSubredditWraper: Decodable, Identifiable {
