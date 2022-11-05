@@ -47,7 +47,7 @@ struct ProfileView: View {
                     .navigationTitle("u/\(user.name)")
                     .toolbar {
                         NavigationLink {
-                            UserSettingsView(user: user)
+                            UserSettingsView(user: user, logout: logout)
                         } label: {
                             Label("Settings", systemImage: "gear")
                         }
@@ -72,11 +72,8 @@ struct ProfileView: View {
                     .ignoresSafeArea()
                     }
                 Spacer()
-                Button("Logout") {
-                    KeychainManager.delete(service: "reddit", account: "currentUser")
-                    logout()
-                }.buttonStyle(FilledRoundedCornerButtonStyle(bgColor: Color("LightRed"), fgColor: .white))
             }
+            .ignoresSafeArea(.all, edges: .bottom)
         }
     }
 }
