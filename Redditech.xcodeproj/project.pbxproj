@@ -41,6 +41,7 @@
 		9ECF10CF2915DBCA002C56D8 /* SubredditDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF10CE2915DBCA002C56D8 /* SubredditDetailsViewModel.swift */; };
 		9ECF10D12915DBEF002C56D8 /* SubredditDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF10D02915DBEF002C56D8 /* SubredditDetailsView.swift */; };
 		9ECF10D32915E180002C56D8 /* SubredditDetailsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECF10D22915E180002C56D8 /* SubredditDetailsResponse.swift */; };
+		9ED065B02919FF8000702C9E /* PopupImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED065AF2919FF8000702C9E /* PopupImage.swift */; };
 		BBC3360F6669A8F2C453A2BF /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = BBC337B236C57651B43F0445 /* .gitignore */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		9ECF10CE2915DBCA002C56D8 /* SubredditDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubredditDetailsViewModel.swift; sourceTree = "<group>"; };
 		9ECF10D02915DBEF002C56D8 /* SubredditDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubredditDetailsView.swift; sourceTree = "<group>"; };
 		9ECF10D22915E180002C56D8 /* SubredditDetailsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubredditDetailsResponse.swift; sourceTree = "<group>"; };
+		9ED065AF2919FF8000702C9E /* PopupImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupImage.swift; sourceTree = "<group>"; };
 		BBC337B236C57651B43F0445 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = file.gitignore; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -260,6 +262,7 @@
 				9E744F5228FCD91B004A0B95 /* PostView.swift */,
 				9E0B50A129073BEE003F060B /* PostSourceButton.swift */,
 				9EA7B8D529132D9800F82DD5 /* PrefsToggle.swift */,
+				9ED065AF2919FF8000702C9E /* PopupImage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 				9EA585652912105D001FD49E /* UserSettingsViewModel.swift in Sources */,
 				9E17F3F628F8AE3000E1EF6A /* WebView.swift in Sources */,
 				9E3A708E28FB4CB300AABF92 /* HomeView.swift in Sources */,
+				9ED065B02919FF8000702C9E /* PopupImage.swift in Sources */,
 				9E74FE8328F7A50900585C6C /* LoginViewModel.swift in Sources */,
 				9E504A7B28FB5E3500576292 /* TokenResponse.swift in Sources */,
 				9EA4EB3B2911FD1200F6E43C /* SearchResponse.swift in Sources */,

@@ -10,6 +10,7 @@ import SwiftUI
 struct SubredditDetailsView: View {
     
     let subredditViewModel: SubredditDetailsViewModel
+    @State var fullScreenImage: String? = nil
     
     init(of subredditName: String, logout: @escaping () -> Void) {
         self.subredditViewModel = SubredditDetailsViewModel(subredditName: subredditName, logout: logout)
@@ -58,7 +59,9 @@ struct SubredditDetailsView: View {
                 }
                 if let posts = subredditViewModel.posts {
                     List(posts.data.children) { post in
-                            PostView(postData: post.data)
+                        PostView(postData: post.data) { image in
+                            fullScreenImage = image
+                        }
                             .padding(.vertical, 8)
                             .listRowBackground(Color("SecondaryColor"))
                             .listRowSeparator(.hidden)
@@ -69,6 +72,7 @@ struct SubredditDetailsView: View {
                     .ignoresSafeArea()
                     }
             }
+            PopupImage(imageUrl: $fullScreenImage)
         }
             .navigationTitle(subredditViewModel.subredditName)
             .toolbar {

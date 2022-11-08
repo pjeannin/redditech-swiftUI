@@ -11,6 +11,7 @@ struct ProfileView: View {
     
     @ObservedObject var profileViewModel: ProfileViewModel
     let logout: () -> Void
+    @State var fullScreenImage: String? = nil
     
     init(logout: @escaping () -> Void) {
         self.logout = logout
@@ -62,7 +63,9 @@ struct ProfileView: View {
                 }
                 if let posts = profileViewModel.posts {
                     List(posts.data.children) { post in
-                            PostView(postData: post.data)
+                        PostView(postData: post.data) { image in
+                            fullScreenImage = image
+                        }
                             .padding(.vertical, 8)
                             .listRowBackground(Color("SecondaryColor"))
                             .listRowSeparator(.hidden)
@@ -79,6 +82,7 @@ struct ProfileView: View {
             }
             .ignoresSafeArea(.all, edges: .bottom)
         }
+        PopupImage(imageUrl: $fullScreenImage)
     }
 }
 
