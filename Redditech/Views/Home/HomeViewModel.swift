@@ -23,7 +23,9 @@ class HomeViewModel: ObservableObject {
     }
     
     private func onPostFetchFail() {
-        isLoading = false
+        DispatchQueue.main.async {
+            self.isLoading = false
+        }
     }
     
     public func fetchPosts() {

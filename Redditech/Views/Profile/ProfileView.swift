@@ -24,7 +24,7 @@ struct ProfileView: View {
             VStack {
                 if let user = profileViewModel.user {
                     ZStack(alignment: .bottomTrailing) {
-                        AsyncImage(url: URL(string: user.subreddit.bannerImg)){ image in
+                        AsyncImage(url: URL(string: user.subreddit.bannerImg)) { image in
                             image
                                 .resizable()
                                 .scaledToFit()
@@ -32,7 +32,7 @@ struct ProfileView: View {
                             } placeholder: {
                                 Color.gray.opacity(0.1)
                             }
-                        AsyncImage(url: URL(string: user.subreddit.iconImg)){ image in
+                        AsyncImage(url: URL(string: user.subreddit.iconImg)) { image in
                             image
                                 .resizable()
                                 .scaledToFit()
@@ -70,7 +70,10 @@ struct ProfileView: View {
                     .listStyle(.plain)
                     .padding(.vertical, 8)
                     .ignoresSafeArea()
+                    .refreshable {
+                        profileViewModel.fetchUserPosts()
                     }
+                }
                 Spacer()
             }
             .ignoresSafeArea(.all, edges: .bottom)

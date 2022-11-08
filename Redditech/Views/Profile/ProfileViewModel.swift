@@ -20,6 +20,13 @@ class ProfileViewModel: ObservableObject {
         print("got user")
     }
     
+    public func fetchUserPosts() {
+        guard let finalUser: MeResponse = self.user else {
+            return
+        }
+        redditService.fetchUserPosts(finalUser.name, onCompleted: onUsersPostFetch, onFailure: onGetUsersPostsFail)
+    }
+    
     private func onGetUserFail() {
         print("get user failed")
     }

@@ -40,6 +40,9 @@ struct HomeView: View {
                             .listStyle(.plain)
                             .padding(.vertical, 8)
                             .ignoresSafeArea()
+                            .refreshable {
+                                homeViewModel.fetchPosts()
+                            }
                     }
                     Spacer()
                 }
