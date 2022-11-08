@@ -17,6 +17,7 @@ struct RedditService {
         URL.init(string: "https://www.reddit.com/api/v1/authorize.compact?client_id=\(clientId)&response_type=code&state=\(state)&redirect_uri=\(redirectUri)&duration=permanent&scope=*")
     }
     let baseUrl: String = "https://oauth.reddit.com"
+    let logout: () -> Void
     
     private func getTokenUrl(code: String) -> URL? {
         return URL.init(string: "https://www.reddit.com/api/v1/access_token?redirect_uri=\(redirectUri)&grant_type=\(grantType)&code=\(code)")
@@ -77,6 +78,14 @@ struct RedditService {
         request.addValue("bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
+            guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
+                onFailure()
+                return
+            }
+            if res.statusCode == 401 {
+                logout()
+                return
+            }
             guard let data = data else {
                 return
             }

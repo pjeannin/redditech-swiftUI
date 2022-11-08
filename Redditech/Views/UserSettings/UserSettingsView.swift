@@ -13,7 +13,7 @@ struct UserSettingsView: View {
     
     init(user: MeResponse, logout: @escaping () -> Void) {
         self.logout = logout
-        userSettingsViewModel = UserSettingsViewModel(user: user)
+        userSettingsViewModel = UserSettingsViewModel(user: user, logout: logout)
         userSettingsViewModel.fetchPrefs()
     }
     
@@ -37,7 +37,6 @@ struct UserSettingsView: View {
                 }
                 Spacer()
                 Button("Logout") {
-                    KeychainManager.delete(service: "reddit", account: "currentUser")
                     logout()
                 }.buttonStyle(FilledRoundedCornerButtonStyle(bgColor: Color("LightRed"), fgColor: .white))
             }

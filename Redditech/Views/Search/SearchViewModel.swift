@@ -10,7 +10,11 @@ import Foundation
 class SearchViewModel: ObservableObject {
     @Published var searchedText: String = ""
     @Published var searchResult: [SearchSubredditWraper] = []
-    private let redditService: RedditService = RedditService()
+    private let redditService: RedditService
+    
+    init(logout: @escaping () -> Void) {
+        redditService = RedditService(logout: logout)
+    }
     
     private func onSearchComplete(_ result: SearchResponse) {
         DispatchQueue.main.async {

@@ -11,8 +11,8 @@ struct SubredditDetailsView: View {
     
     let subredditViewModel: SubredditDetailsViewModel
     
-    init(of subredditName: String) {
-        self.subredditViewModel = SubredditDetailsViewModel(subredditName: subredditName)
+    init(of subredditName: String, logout: @escaping () -> Void) {
+        self.subredditViewModel = SubredditDetailsViewModel(subredditName: subredditName, logout: logout)
         subredditViewModel.fetchSubreddit(subredditName)
         subredditViewModel.fetchSubredditPosts(subredditName)
     }
@@ -85,6 +85,6 @@ struct SubredditDetailsView: View {
 
 struct SubredditDetails_Previews: PreviewProvider {
     static var previews: some View {
-        SubredditDetailsView(of: "r/apple")
+        SubredditDetailsView(of: "r/apple") {}
     }
 }

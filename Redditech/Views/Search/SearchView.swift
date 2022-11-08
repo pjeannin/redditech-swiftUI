@@ -14,8 +14,15 @@ struct Element: Identifiable {
 
 struct SearchView: View {
     
-    @ObservedObject var searchViewModel: SearchViewModel = SearchViewModel()
+    @ObservedObject var searchViewModel: SearchViewModel
     @Binding var showSearch: Bool
+    let logout: () -> Void
+    
+    init(showSearch: Binding<Bool>, logout: @escaping () -> Void) {
+        self.logout = logout
+        self.searchViewModel = SearchViewModel(logout: logout)
+        self._showSearch = showSearch
+    }
     
     var body: some View {
         
@@ -58,7 +65,7 @@ struct SearchView: View {
                     }
                     List(searchViewModel.searchResult) { elem in
                         NavigationLink {
-                            SubredditDetailsView(of: elem.data.displayNamePrefixed)
+                            SubredditDetailsView(of: elem.data.displayNamePrefixed, logout: logout)
                         } label: {
                             HStack {
                                 if let imgUrl: String = elem.data.communityIcon {
@@ -93,6 +100,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(showSearch: .constant(true))
+        SearchView(showSearch: .constant(true)) {}
     }
 }

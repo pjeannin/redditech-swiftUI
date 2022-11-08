@@ -10,7 +10,11 @@ import Foundation
 class ProfileViewModel: ObservableObject {
     @Published var user: MeResponse? = nil
     @Published var posts: ListPostResponse? = nil
-    private let redditService: RedditService = RedditService()
+    private let redditService: RedditService
+    
+    init(logout: @escaping () -> Void) {
+        self.redditService = RedditService(logout: logout)
+    }
     
     private func onUserFetch(_ data: MeResponse) {
         DispatchQueue.main.async {

@@ -13,7 +13,11 @@ class HomeViewModel: ObservableObject {
     @Published var currentPostSource: PostSource = .new
     @Published var posts: ListPostResponse? = nil
     @Published var isLoading: Bool = false
-    let redditService: RedditService = RedditService()
+    let redditService: RedditService
+    
+    init(logout: @escaping () -> Void) {
+        self.redditService = RedditService(logout: logout)
+    }
     
     private func onPostFetched(newPosts: ListPostResponse) {
         DispatchQueue.main.async {

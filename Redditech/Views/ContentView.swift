@@ -32,9 +32,13 @@ struct ContentView: View {
             if (showLogin) {
                 LoginView(showLogin: $showLogin) {
                     showLogin = false
+                } logout: {
+                    KeychainManager.delete(service: "reddit", account: "currentUser")
+                    showLogin = true
                 }
             } else {
                 HomeView() {
+                    KeychainManager.delete(service: "reddit", account: "currentUser")
                     showLogin = true
                 }
             }

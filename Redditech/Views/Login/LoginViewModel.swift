@@ -12,12 +12,12 @@ class LoginViewModel: ObservableObject {
     @Published var showWebView : Bool = false
     @Published var showErrorMessage: Bool = false
     let changeView: () -> Void
+    let redditService: RedditService
     
-    init(changeView: @escaping () -> Void) {
+    init(changeView: @escaping () -> Void, logout: @escaping () -> Void) {
         self.changeView = changeView
+        self.redditService = RedditService(logout: logout)
     }
-    
-    let redditService: RedditService = RedditService()
     
     private func saveToken(_ token: String) {
         do {

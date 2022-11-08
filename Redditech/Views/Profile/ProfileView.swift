@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ProfileView: View {
     
-    @ObservedObject var profileViewModel: ProfileViewModel = ProfileViewModel()
+    @ObservedObject var profileViewModel: ProfileViewModel
     let logout: () -> Void
     
     init(logout: @escaping () -> Void) {
         self.logout = logout
+        self.profileViewModel = ProfileViewModel(logout: logout)
         profileViewModel.getUser()
     }
     

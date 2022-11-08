@@ -10,10 +10,11 @@ import Foundation
 class UserSettingsViewModel: ObservableObject {
     let user: MeResponse?
     @Published var prefs: PrefsResponse = PrefsResponse()
-    let redditService: RedditService = RedditService()
+    let redditService: RedditService
     
-    init(user: MeResponse) {
+    init(user: MeResponse, logout: @escaping () -> Void) {
         self.user = user
+        self.redditService = RedditService(logout: logout)
     }
     
     private func onFetchPrefs(_ res: PrefsResponse) {

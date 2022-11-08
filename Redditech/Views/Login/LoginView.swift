@@ -12,10 +12,12 @@ struct LoginView: View {
     
     @Binding var showLogin: Bool
     @ObservedObject var loginViewModel: LoginViewModel
+    let logout: () -> Void
     
-    init(showLogin: Binding<Bool>, changeView: @escaping () -> Void) {
+    init(showLogin: Binding<Bool>, changeView: @escaping () -> Void, logout: @escaping () -> Void) {
         self._showLogin = showLogin
-        self.loginViewModel = LoginViewModel(changeView: changeView)
+        self.logout = logout
+        self.loginViewModel = LoginViewModel(changeView: changeView, logout: logout)
     }
     
     var body: some View {
@@ -57,6 +59,6 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(showLogin: .constant(true)) { }
+        LoginView(showLogin: .constant(true)) { } logout: { }
     }
 }

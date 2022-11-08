@@ -10,10 +10,11 @@ import SwiftUI
 struct HomeView: View {
     
     let logout: () -> Void
-    @ObservedObject var homeViewModel: HomeViewModel = HomeViewModel()
+    @ObservedObject var homeViewModel: HomeViewModel
     
     init(logout: @escaping () -> Void) {
         self.logout = logout
+        self.homeViewModel = HomeViewModel(logout: logout)
         homeViewModel.fetchPosts()
     }
     
@@ -69,7 +70,7 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $homeViewModel.showSearch) {
-            SearchView(showSearch: $homeViewModel.showSearch)
+            SearchView(showSearch: $homeViewModel.showSearch, logout: logout)
         }
     }
 }

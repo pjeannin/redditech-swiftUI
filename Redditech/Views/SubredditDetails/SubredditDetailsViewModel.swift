@@ -11,10 +11,11 @@ class SubredditDetailsViewModel: ObservableObject {
     let subredditName: String
     @Published var subredditInfos: SubredditDetails? = nil
     @Published var posts: ListPostResponse? = nil
-    let redditService: RedditService = RedditService()
+    let redditService: RedditService
     
-    init(subredditName: String) {
+    init(subredditName: String, logout: @escaping () -> Void) {
         self.subredditName = subredditName
+        self.redditService = RedditService(logout: logout)
     }
     
     private func onFetchSubreddit(_ subreddit: SubredditDetailsResponse) {
