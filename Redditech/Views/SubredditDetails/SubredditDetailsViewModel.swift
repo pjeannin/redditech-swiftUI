@@ -18,43 +18,53 @@ class SubredditDetailsViewModel: ObservableObject {
         self.redditService = RedditService(logout: logout)
     }
     
-    private func onFetchSubreddit(_ subreddit: SubredditDetailsResponse) {
-        DispatchQueue.main.async {
-            self.subredditInfos = subreddit.data
+    private func onFetchSubreddit(result: Result<SubredditDetailsResponse, RedditService.RedditError>) {
+        switch result {
+        case .success(let subreddit):
+            DispatchQueue.main.async {
+                self.subredditInfos = subreddit.data
+            }
+            break
+        case .failure(let error):
+            print("## When fetch subreddit")
+            error.print()
         }
-    }
-    
-    private func onFetchSubredditFail() {
-        
     }
     
     public func fetchSubreddit(_ subredditName: String) {
-        redditService.fetchSubreddit(subredditName, onCompleted: onFetchSubreddit, onFailure: onFetchSubredditFail)
+        redditService.fetchSubreddit(subredditName, onCompleted: onFetchSubreddit)
     }
     
-    private func onFetchSubredditPosts(_ posts: ListPostResponse) {
-        DispatchQueue.main.async {
-            self.posts = posts
+    private func onFetchSubredditPosts(result: Result<ListPostResponse, RedditService.RedditError>) {
+        switch result {
+        case .success(let posts):
+            DispatchQueue.main.async {
+                self.posts = posts
+            }
+            break
+        case .failure(let error):
+            print("## When fetch subreddit posts")
+            error.print()
+            break
         }
     }
     
-    private func onFetchSubredditPostsFail() {
-        
-    }
-    
     public func fetchSubredditPosts(_ subredditName: String) {
-        redditService.fetchPostsOf(subreddit: subredditName, onCompleted: onFetchSubredditPosts, onFailure: onFetchSubredditPostsFail)
+        redditService.fetchPostsOf(subreddit: subredditName, onCompleted: onFetchSubredditPosts)
     }
     
-    private func onSubscribeUnsubscribeComplete(subredditName: String) {
-        fetchSubreddit(subredditName)
-    }
-    
-    private func onSubscribeUnsubscribeFail() {
-        
+    private func onSubscribeUnsubscribeComplete(result: Result<String, RedditService.RedditError>) {
+        switch result {
+        case .success(let subredditName):
+            fetchSubreddit(subredditName)
+            break
+        case .failure(let error):
+            print("## When subscribe")
+            error.print()
+        }
     }
     
     public func subscribeOrUnsubscribe(to subredditName: String, currentValue isUserSubscribe: Bool) {
-        redditService.subscribeOrUnsubscribe(to: subredditName, value: !isUserSubscribe, onCompleted: onSubscribeUnsubscribeComplete, onFailure: onSubscribeUnsubscribeFail)
+        redditService.subscribeOrUnsubscribe(to: subredditName, value: !isUserSubscribe, onCompleted: onSubscribeUnsubscribeComplete)
     }
 }

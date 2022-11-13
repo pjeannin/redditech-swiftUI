@@ -30,19 +30,24 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    private func onGetTokenSuccess(token: String) {
-        saveToken(token)
-        print("the encoded token is \(token)")
-    }
-    
-    private func onGetTokenFail() {
-        DispatchQueue.main.async {
-            self.showErrorMessage = true
+    private func onGetTokenCompleted(result: Result<String, RedditService.RedditError>) {
+        switch result {
+        case .success(let token):
+            saveToken(token)
+            print("the encoded token is \(token)")
+            break
+        case .failure(let error):
+            DispatchQueue.main.async {
+                self.showErrorMessage = true
+            }
+            print("## When get user token :")
+            error.print()
+            break
         }
     }
         
     public func getAndSaveCode(from redirectUri: String) {
-        redditService.getToken(from: redirectUri, onCompleted: onGetTokenSuccess, onFailure: onGetTokenFail)
+        redditService.getToken(from: redirectUri, onCompleted: onGetTokenCompleted)
     }
     
 }

@@ -19,21 +19,24 @@ class HomeViewModel: ObservableObject {
         self.redditService = RedditService(logout: logout)
     }
     
-    private func onPostFetched(newPosts: ListPostResponse) {
+    private func onPostFetched(result: Result<ListPostResponse, RedditService.RedditError>) {
         DispatchQueue.main.async {
             self.isLoading = false
-            self.posts = newPosts
         }
-    }
-    
-    private func onPostFetchFail() {
-        DispatchQueue.main.async {
-            self.isLoading = false
+        switch result {
+        case .success(let posts):
+            DispatchQueue.main.async {
+                self.posts = posts
+            }
+            break
+        case .failure(let error):
+            print("## When fetch posts")
+            error.print()
         }
     }
     
     public func fetchPosts() {
         isLoading = true
-        redditService.fetchHomePosts(postType: currentPostSource, onCompleted: onPostFetched, onFailure: onPostFetchFail)
+        redditService.fetchHomePosts(postType: currentPostSource, onCompleted: onPostFetched)
     }
 }

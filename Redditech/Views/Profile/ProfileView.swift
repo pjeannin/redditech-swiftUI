@@ -24,7 +24,10 @@ struct ProfileView: View {
             Color("SecondaryColor")
                 .ignoresSafeArea()
             VStack {
-                if let user = profileViewModel.user {
+                if profileViewModel.error {
+                    Text("An error occured. Please restart the application")
+                        .foregroundColor(Color("LightRed"))
+                } else if let user = profileViewModel.user {
                     ZStack(alignment: .bottomTrailing) {
                         AsyncImage(url: URL(string: user.subreddit.bannerImg)) { image in
                             image

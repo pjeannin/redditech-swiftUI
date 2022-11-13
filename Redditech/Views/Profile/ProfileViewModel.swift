@@ -10,43 +10,52 @@ import Foundation
 class ProfileViewModel: ObservableObject {
     @Published var user: MeResponse? = nil
     @Published var posts: ListPostResponse? = nil
+    @Published var error: Bool = false
     private let redditService: RedditService
     
     init(logout: @escaping () -> Void) {
         self.redditService = RedditService(logout: logout)
     }
     
-    private func onUserFetch(_ data: MeResponse) {
-        DispatchQueue.main.async {
-            self.user = data
+    private func onUserFetch(res: Result<MeResponse, RedditService.RedditError>) {
+        switch res {
+        case .success(let data):
+            DispatchQueue.main.async {
+                self.user = data
+            }
+            self.error = false
+            redditService.fetchUserPosts(data.name, onCompleted: onUsersPostFetch)
+            break
+        case .failure(let error):
+            print("## When fetch user")
+            error.print()
+            self.error = true
         }
-        redditService.fetchUserPosts(data.name, onCompleted: onUsersPostFetch, onFailure: onGetUsersPostsFail)
-        print("got user")
     }
     
     public func fetchUserPosts() {
         guard let finalUser: MeResponse = self.user else {
             return
         }
-        redditService.fetchUserPosts(finalUser.name, onCompleted: onUsersPostFetch, onFailure: onGetUsersPostsFail)
+        redditService.fetchUserPosts(finalUser.name, onCompleted: onUsersPostFetch)
     }
     
-    private func onGetUserFail() {
-        print("get user failed")
-    }
-    
-    private func onUsersPostFetch(_ data: ListPostResponse) {
-        DispatchQueue.main.async {
-            self.posts = data
+    private func onUsersPostFetch(result: Result<ListPostResponse, RedditService.RedditError>) {
+        switch result {
+        case .success(let data):
+            DispatchQueue.main.async {
+                self.posts = data
+            }
+            self.error = false
+            break
+        case .failure(let error):
+            print("## When fetch user posts")
+            error.print()
+            self.error = true
         }
-        print("got user posts")
-    }
-    
-    private func onGetUsersPostsFail() {
-        print("get user posts failed")
     }
     
     func getUser() {
-        redditService.fetchMe(onCompleted: onUserFetch, onFailure: onGetUserFail)
+        redditService.fetchMe(onCompleted: onUserFetch)
     }
 }

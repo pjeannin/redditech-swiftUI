@@ -17,26 +17,34 @@ class UserSettingsViewModel: ObservableObject {
         self.redditService = RedditService(logout: logout)
     }
     
-    private func onFetchPrefs(_ res: PrefsResponse) {
-        prefs = res
-    }
-    
-    private func onFetchPrefsFail() {
-        
+    private func onFetchPrefs(result: Result<PrefsResponse, RedditService.RedditError>) {
+        switch result {
+        case .success(let data):
+            DispatchQueue.main.async {
+                self.prefs = data
+            }
+            break
+        case .failure(let error):
+            print("## When fetch prefs")
+            error.print()
+        }
     }
     
     public func fetchPrefs() {
-        redditService.fetchMePrefs(onCompleted: onFetchPrefs, onFailure: onFetchPrefsFail)
+        redditService.fetchMePrefs(onCompleted: onFetchPrefs)
     }
     
-    private func onPatchPrefs() {
-    }
-    
-    private func onPatchPrefsFail(message: String) {
-        print(message)
+    private func onPatchPrefs(res: Result<String, RedditService.RedditError>) {
+        switch res {
+        case .success(_):
+            break
+        case .failure(let error):
+            print("## When patch prefs")
+            error.print()
+        }
     }
     
     public func patchPrefs() {
-        redditService.patchPrefs(with: prefs, onCompleted: onPatchPrefs, onFailure: onPatchPrefsFail)
+        redditService.patchPrefs(with: prefs, onCompleted: onPatchPrefs)
     }
 }

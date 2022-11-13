@@ -7,7 +7,42 @@
 
 import Foundation
 
+
 struct RedditService {
+    
+    enum RedditError: Error {
+        case cannotBuildUrl
+        case emptyData
+        case failToDecodeDatas
+        case failToConvertResponseToHTTPURLResponse
+        case failToEncodeBody
+        case taskFailed
+        
+        func print() -> Void {
+            var toPrint: String = "## Reddit Error "
+            switch self {
+            case .cannotBuildUrl:
+                toPrint += "Cannot build url"
+                break
+            case .emptyData:
+                toPrint += "Empty data"
+                break
+            case .failToDecodeDatas:
+                toPrint += "Fail to decode datas"
+                break
+            case .failToConvertResponseToHTTPURLResponse:
+                toPrint += "Fail to convert response to HTTPURLResponse"
+                break
+            case .failToEncodeBody:
+                toPrint += "Fail to encode body"
+                break
+            case .taskFailed:
+                toPrint += "Task failed"
+                break
+            }
+            Swift.print(toPrint)
+        }
+    }
     
     let clientId: String = "dUxErvdbUGrVgwX4ZMHD8A"
     let redirectUri: String = "http://pierre.sfsu/loggedin"
@@ -27,8 +62,11 @@ struct RedditService {
         return "\(clientId):\(code)".data(using: .utf8)?.base64EncodedString() ?? ""
     }
     
-    private func fetchToken(with authorizationCode: String, and code: String, onCompleted: @escaping (String) -> Void,  onFailure: @escaping () -> Void) {
-        guard let url: URL = getTokenUrl(code: code) else { return }
+    private func fetchToken(with authorizationCode: String, and code: String, onCompleted: @escaping (Result<String, RedditError>) -> Void) {
+        guard let url: URL = getTokenUrl(code: code) else {
+            onCompleted(.failure(.cannotBuildUrl))
+            return
+        }
         
         var request = URLRequest(
             url: url,
@@ -39,6 +77,7 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let data = data else {
+                onCompleted(.failure(.emptyData))
                 return
             }
             let decoder = JSONDecoder()
@@ -46,27 +85,27 @@ struct RedditService {
             do {
                 let tokenResponse = try decoder.decode(TokenResponse.self, from: data)
                 print("The access token is \(tokenResponse.accessToken)")
-                onCompleted(tokenResponse.accessToken)
+                onCompleted(.success(tokenResponse.accessToken))
             } catch {
-                onFailure()
+                onCompleted(.failure(.failToDecodeDatas))
                 print(error)
             }
         }
         task.resume()
     }
     
-    func getToken(from redirectUri: String, onCompleted: @escaping (String) -> Void, onFailure: @escaping () -> Void) {
+    func getToken(from redirectUri: String, onCompleted: @escaping (Result<String, RedditError>) -> Void) {
         guard let url = URLComponents(string: redirectUri) else { return }
         guard let code = url.queryItems?.first(where: { $0.name == "code" })?.value else { return }
         let authorization = getAuthorizationEncodedCode(from: code)
-        fetchToken(with: authorization, and: code, onCompleted: onCompleted, onFailure: onFailure)
+        fetchToken(with: authorization, and: code, onCompleted: onCompleted)
     }
     
-    func fetchMe(onCompleted: @escaping (MeResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchMe(onCompleted: @escaping (Result<MeResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me?raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -79,7 +118,7 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
-                onFailure()
+                onCompleted(.failure(.failToConvertResponseToHTTPURLResponse))
                 return
             }
             if res.statusCode == 401 {
@@ -87,26 +126,27 @@ struct RedditService {
                 return
             }
             guard let data = data else {
+                onCompleted(.failure(.failToDecodeDatas))
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let me = try decoder.decode(MeResponse.self, from: data)
-                onCompleted(me)
+                onCompleted(.success(me))
             } catch {
-                onFailure()
+                onCompleted(.failure(.failToDecodeDatas))
                 print(error)
             }
         }
         task.resume()
     }
     
-    func fetchUserPosts(_ username: String, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchUserPosts(_ username: String, onCompleted: @escaping (Result<ListPostResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/user/\(username)/new?sr_detail=sr_detail&raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -125,20 +165,20 @@ struct RedditService {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
-                onCompleted(usersPosts)
+                onCompleted(.success(usersPosts))
             } catch {
-                onFailure()
+                onCompleted(.failure(.failToDecodeDatas))
                 print(error)
             }
         }
         task.resume()
     }
     
-    func fetchSearch(_ toSearch: String, onCompleted: @escaping (SearchResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchSearch(_ toSearch: String, onCompleted: @escaping (Result<SearchResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)//subreddits/search?limit=100&q=\(toSearch)&raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -151,26 +191,26 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let data = data else {
+                onCompleted(.failure(.emptyData))
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let subreddits = try decoder.decode(SearchResponse.self, from: data)
-                onCompleted(subreddits)
+                onCompleted(.success(subreddits))
             } catch {
-                onFailure()
-                print(error)
+                onCompleted(.failure(.failToDecodeDatas))
             }
         }
         task.resume()
     }
     
-    func fetchMePrefs(onCompleted: @escaping (PrefsResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchMePrefs(onCompleted: @escaping (Result<PrefsResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me/prefs?raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -189,20 +229,20 @@ struct RedditService {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let prefs = try decoder.decode(PrefsResponse.self, from: data)
-                onCompleted(prefs)
+                onCompleted(.success(prefs))
             } catch {
-                onFailure()
+                onCompleted(.failure(.failToDecodeDatas))
                 print(error)
             }
         }
         task.resume()
     }
     
-    func patchPrefs(with newPrefs: PrefsResponse, onCompleted: @escaping () -> Void, onFailure: @escaping (String) -> Void) {
+    func patchPrefs(with newPrefs: PrefsResponse, onCompleted: @escaping (Result<String,RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/v1/me/prefs")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure("Fail to create URL")
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -220,28 +260,28 @@ struct RedditService {
             let body = try encoder.encode(newPrefs)
             request.httpBody = body
         } catch {
-            onFailure("Fail to encode body")
+            onCompleted(.failure(.failToEncodeBody))
         }
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
-                onFailure("Fail to convert URLResponse to HTTPURLResponse")
+                onCompleted(.failure(.failToConvertResponseToHTTPURLResponse))
                 return
             }
             if (res.statusCode == 200) {
-                onCompleted()
+                onCompleted(.success(""))
             } else {
-                onFailure(res.description + "" + res.debugDescription)
+                onCompleted(.failure(.failToDecodeDatas))
             }
         }
         task.resume()
     }
     
-    func fetchHomePosts(postType: PostSource, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchHomePosts(postType: PostSource, onCompleted: @escaping (Result<ListPostResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(postType == .hot ? "hot" : (postType == .new ? "new" : "top"))?sr_detail=sr_detail&raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -260,20 +300,19 @@ struct RedditService {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
-                onCompleted(usersPosts)
+                onCompleted(.success(usersPosts))
             } catch {
-                onFailure()
-                print(error)
+                onCompleted(.failure(.failToDecodeDatas))
             }
         }
         task.resume()
     }
     
-    func fetchSubreddit(_ subredditName: String, onCompleted: @escaping (SubredditDetailsResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchSubreddit(_ subredditName: String, onCompleted: @escaping (Result<SubredditDetailsResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(subredditName)/about?raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -286,26 +325,27 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let data = data else {
+                onCompleted(.failure(.emptyData))
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let subreddit = try decoder.decode(SubredditDetailsResponse.self, from: data)
-                onCompleted(subreddit)
+                onCompleted(.success(subreddit))
             } catch {
-                onFailure()
+                onCompleted(.failure(.failToDecodeDatas))
                 print(error)
             }
         }
         task.resume()
     }
     
-    func fetchPostsOf(subreddit subredditName: String, onCompleted: @escaping (ListPostResponse) -> Void, onFailure: @escaping () -> Void) {
+    func fetchPostsOf(subreddit subredditName: String, onCompleted: @escaping (Result<ListPostResponse, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/\(subredditName)/new?sr_detail=sr_detail&raw_json=1")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -318,26 +358,26 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let data = data else {
+                onCompleted(.failure(.emptyData))
                 return
             }
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             do {
                 let usersPosts = try decoder.decode(ListPostResponse.self, from: data)
-                onCompleted(usersPosts)
+                onCompleted(.success(usersPosts))
             } catch {
-                onFailure()
-                print(error)
+                onCompleted(.failure(.failToDecodeDatas))
             }
         }
         task.resume()
     }
     
-    func subscribeOrUnsubscribe(to subredditName: String, value: Bool, onCompleted: @escaping (String) -> Void, onFailure: @escaping () -> Void) {
+    func subscribeOrUnsubscribe(to subredditName: String, value: Bool, onCompleted: @escaping (Result<String, RedditError>) -> Void) {
         let maybeUrl: URL? = URL.init(string: "\(baseUrl)/api/subscribe?action=\(value ? "sub" : "unsub")&sr_name=\(subredditName)")
         let maybeAccessToken = KeychainManager.get(service: "reddit", account: "currentUser")
         guard let url: URL = maybeUrl, let dataAccessToken: Data = maybeAccessToken else {
-            onFailure()
+            onCompleted(.failure(.cannotBuildUrl))
             return
         }
         let accessToken = String(decoding: dataAccessToken, as: UTF8.self)
@@ -350,13 +390,13 @@ struct RedditService {
         let session: URLSession = URLSession.shared
         let task = session.dataTask(with: request) { (data: Data?, response, error) -> Void in
             guard let res: HTTPURLResponse = response as? HTTPURLResponse else {
-                onFailure()
+                onCompleted(.failure(.failToConvertResponseToHTTPURLResponse))
                 return
             }
             if (res.statusCode == 200) {
-                onCompleted(subredditName)
+                onCompleted(.success(subredditName))
             } else {
-                onFailure()
+                onCompleted(.failure(.taskFailed))
             }
         }
         task.resume()
