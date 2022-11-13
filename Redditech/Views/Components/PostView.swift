@@ -85,6 +85,14 @@ struct PostView: View {
                             }
                     }
                 }
+                HStack {
+                    Image(systemName: "chevron.down")
+                    Text("\(postData.ups)")
+                    Image(systemName: "chevron.up")
+                    Text("\(postData.downs)")
+                    Spacer()
+                }
+                .padding()
             }
         }
         .cornerRadius(15)
