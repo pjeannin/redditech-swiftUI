@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SubredditDetailsView: View {
     
-    let subredditViewModel: SubredditDetailsViewModel
+    @ObservedObject var subredditViewModel: SubredditDetailsViewModel
     @State var fullScreenImage: String? = nil
     
     init(of subredditName: String, logout: @escaping () -> Void) {

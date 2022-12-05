@@ -72,6 +72,7 @@ struct HomeView: View {
                     }
                     .foregroundColor(Color("PrimaryColor"))
                 }
+                
             }
             .sheet(isPresented: $homeViewModel.showSearch) {
                 SearchView(showSearch: $homeViewModel.showSearch, logout: logout)

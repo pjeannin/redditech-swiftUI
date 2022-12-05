@@ -32,6 +32,9 @@ struct PopupImage: View {
                         imageUrl = nil
                     }
             }
+            .onTapGesture() {
+                imageUrl = nil
+            }
         }
     }
 }

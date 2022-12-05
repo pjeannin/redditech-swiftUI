@@ -35,6 +35,8 @@ class SearchViewModel: ObservableObject {
     }
     
     public func onSearchTextChange() {
-        redditService.fetchSearch(searchedText, onCompleted: onSearchComplete)
+        if (searchedText != "") {
+            redditService.fetchSearch(searchedText, onCompleted: onSearchComplete)
+        }
     }
 }
